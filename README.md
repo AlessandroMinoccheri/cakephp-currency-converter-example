@@ -17,7 +17,7 @@ To run the converter function you need to visit the page index of the controller
 So if your site is for example: http://localhost/yoursite.com
 You need to wirte this url http://localhost/yoursite.com/example and you can view the original price and price converted
 
-License
+#License
 
 The MIT License (MIT)
 
