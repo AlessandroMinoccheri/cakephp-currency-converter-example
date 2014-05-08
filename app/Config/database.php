@@ -64,10 +64,10 @@ class DATABASE_CONFIG {
 	public $default = array(
 		'datasource' => 'Database/Mysql',
 		'persistent' => false,
-		'host' => '127.0.0.1',
-		'login' => 'alessandro',
-		'password' => 'AlessandroWeb_2013',
-		'database' => 'currency_converter',
+		'host' => 'localhost',
+		'login' => 'user',
+		'password' => 'password',
+		'database' => 'database_name',
 		'prefix' => '',
 		//'encoding' => 'utf8',
 	);
