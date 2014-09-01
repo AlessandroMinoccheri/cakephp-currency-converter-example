@@ -64,7 +64,7 @@ class DATABASE_CONFIG {
 	public $default = array(
 		'datasource' => 'Database/Mysql',
 		'persistent' => false,
-		'host' => '127.0.0.1',
+		'host' => 'localhost',
 		'login' => 'alessandro',
 		'password' => 'AlessandroWeb_2013',
 		'database' => 'currency_converter',
@@ -76,9 +76,9 @@ class DATABASE_CONFIG {
 		'datasource' => 'Database/Mysql',
 		'persistent' => false,
 		'host' => 'localhost',
-		'login' => 'user',
-		'password' => 'password',
-		'database' => 'test_database_name',
+		'login' => 'alessandro',
+		'password' => 'AlessandroWeb_2013',
+		'database' => 'currency_converter',
 		'prefix' => '',
 		//'encoding' => 'utf8',
 	);
