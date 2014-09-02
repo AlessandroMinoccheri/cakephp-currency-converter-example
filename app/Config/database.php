@@ -65,9 +65,15 @@ class DATABASE_CONFIG {
 		'datasource' => 'Database/Mysql',
 		'persistent' => false,
 		'host' => 'localhost',
+<<<<<<< HEAD
 		'login' => 'alessandro',
 		'password' => 'AlessandroWeb_2013',
 		'database' => 'currency_converter',
+=======
+		'login' => 'user',
+		'password' => 'password',
+		'database' => 'database_name',
+>>>>>>> 0bd8ccc8a1f541fb9df4b9bbe510f201d38e80f9
 		'prefix' => '',
 		//'encoding' => 'utf8',
 	);
