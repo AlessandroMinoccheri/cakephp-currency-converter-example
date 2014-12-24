@@ -5,20 +5,36 @@ class CurrencyConverterComponent extends Component {
 	var $controller = '';
     var $components = array('RequestHandler');
 
+    /**
+     * Initialization to get controller variable
+     *
+     * @param Controller $controller The controller to use.
+     * @param array $settings Array of settings.
+     */
 	function initialize(Controller $controller, $settings = array()) { 
         $this->controller =& $controller; 
     } 
 
+    /**
+     * Convertion function
+     *
+     * @param string $from_currency the starting currency that user wants to convert to.
+     * @param string $to_currency the ending currency that user wants to convert to.
+     * @param float $amount the amount to convert.
+     * @param boolean $save_into_db if develop wants to store convertion rate for use it without resending data to yahoo service.
+     * @param int $hour_difference the hour difference to check if the last convertion is passed, if yes make a new call to yahoo finance api.
+     * @return float the total amount converted into the new currency
+     */
     public function convert($from_currency, $to_currency, $amount, $save_into_db = 1, $hour_difference = 1) {
     	if($from_currency != $to_currency){
-            $rate = 0;
             $find = 0;
+            $rate = 0;
 
             if ($from_currency=="PDS")
                 $from_currency = "GBP";
             
             if($save_into_db == 1){
-                $this->checkIfExistTable();
+                $this->_checkIfExistTable();
 
                 $CurrencyConverter = ClassRegistry::init('CurrencyConverter');
                 $result = $CurrencyConverter->find('all', array('conditions' => 
@@ -33,7 +49,7 @@ class CurrencyConverterComponent extends Component {
                     $diff = $d_start->diff($d_end);
 
                     if(((int)$diff->y >= 1) || ((int)$diff->m >= 1) || ((int)$diff->d >= 1) || ((int)$diff->h >= $hour_difference) || ((double)$row['CurrencyConverter']['rates'] == 0)){
-                        $rate = $this->getRates($from_currency, $to_currency);
+                        $rate = $this->_getRates($from_currency, $to_currency);
 
                         $CurrencyConverter->id = $row['CurrencyConverter']['id'];
 						$CurrencyConverter->set(array(
@@ -50,7 +66,7 @@ class CurrencyConverterComponent extends Component {
                 }
 
                 if($find == 0){
-                    $rate = $this->getRates($from_currency, $to_currency);
+                    $rate = $this->_getRates($from_currency, $to_currency);
 
                     $CurrencyConverter->create();
 					$CurrencyConverter->set(array(
@@ -66,7 +82,7 @@ class CurrencyConverterComponent extends Component {
                 return number_format((double)$value, 2, '.', '');
             }
             else{
-                $rate = $this->getRates($from_currency, $to_currency);
+                $rate = $this->_getRates($from_currency, $to_currency);
                 $value = (double)$rate*(double)$amount;
                 return number_format((double)$value, 2, '.', '');
             }
@@ -76,7 +92,14 @@ class CurrencyConverterComponent extends Component {
         }
     }
 
-    private function getRates($from_currency, $to_currency){
+    /**
+     * Convertion function call to yahoo finance api
+     *
+     * @param string $from_currency the starting currency that user wants to convert to.
+     * @param string $to_currency the ending currency that user wants to convert to.
+     * @return float the rate of convertion
+     */
+    private function __getRates($from_currency, $to_currency){
         $url = 'http://finance.yahoo.com/d/quotes.csv?e=.csv&f=sl1d1t1&s='. $from_currency . $to_currency .'=X';
         $handle = @fopen($url, 'r');
          
@@ -95,14 +118,21 @@ class CurrencyConverterComponent extends Component {
         return($rate);
     }
 
-    private function checkIfExistTable(){
+    /**
+     * Convertion function call to yahoo finance api
+     *
+     * @return boolean if the table standard currency_converters exist into the database
+     */
+    private function _checkIfExistTable(){
     	$find = 0;
+        
     	App::uses('ConnectionManager', 'Model');
     	$db = ConnectionManager::getDataSource('default');
 		$tables = $db->listSources();
 		foreach($tables as $t){
-			if($t == 'currency_converters')
+			if($t == 'currency_converters'){
 				$find = 1;
+            }
 		}
 
 		if($find == 0){
