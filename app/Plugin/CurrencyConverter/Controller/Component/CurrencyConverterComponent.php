@@ -27,7 +27,6 @@ class CurrencyConverterComponent extends Component {
      */
     public function convert($fromCurrency, $toCurrency, $amount, $saveIntoDb = 1, $hourDifference = 1) {
     	if($fromCurrency != $toCurrency){
-            $find = 0;
             $rate = 0;
 
             if ($fromCurrency == "PDS")
@@ -37,32 +36,13 @@ class CurrencyConverterComponent extends Component {
                 $this->_checkIfExistTable();
 
                 $CurrencyConverter = ClassRegistry::init('CurrencyConverter');
-                $result = $CurrencyConverter->find('all', array('conditions' => 
-                	array('from' => $fromCurrency, 'to' => $toCurrency)));
-
-                foreach ($result as $row){
-                    $find = 1;
-                    $lastUpdated = $row['CurrencyConverter']['modified'];
-                    $now = date('Y-m-d H:i:s');
-                    $dStart = new DateTime($now);
-                    $dEnd = new DateTime($lastUpdated);
-                    $diff = $dStart->diff($dEnd);
-
-                    if(((int)$diff->y >= 1) || ((int)$diff->m >= 1) || ((int)$diff->d >= 1) || ((int)$diff->h >= $hourDifference) || ((double)$row['CurrencyConverter']['rates'] == 0)){
-                        $rate = $this->_getRates($fromCurrency, $toCurrency);
-
-                        $CurrencyConverter->id = $row['CurrencyConverter']['id'];
-						$CurrencyConverter->set(array(
-						    'from'        => $fromCurrency,
-						    'to'          => $toCurrency,
-						    'rates'       => $rate,
-                            'modified'    => date('Y-m-d H:i:s'),
-						));
-						$CurrencyConverter->save();
-                    }
-                    else{
-                        $rate = $row['CurrencyConverter']['rates'];
-                    }
+                
+                $arrReturn = $this->checkToFind($fromCurrency, $toCurrency, $hourDifference);
+                if(isset($arrReturn['find'])){
+                    $find = $arrReturn['find'];
+                }
+                if(isset($arrReturn['rate'])){
+                    $rate = $arrReturn['rate'];
                 }
 
                 if($find == 0){
@@ -78,6 +58,7 @@ class CurrencyConverterComponent extends Component {
 					));
 					$CurrencyConverter->save();
                 }
+
                 $value = (double)$rate * (double)$amount;
                 return number_format((double)$value, 2, '.', '');
             }
@@ -90,6 +71,54 @@ class CurrencyConverterComponent extends Component {
         else{
             return number_format((double)$amount, 2, '.', '');
         }
+    }
+
+    /**
+     * Convertion function call to yahoo finance api
+     *
+     * @param string $fromCurrency the starting currency that user wants to convert to.
+     * @param string $toCurrency the ending currency that user wants to convert to.
+     * @param int $hourDifference the hour difference to check if the last convertion is passed, if yes make a new call to yahoo finance api.
+     * @return int if it's finded value
+     */
+    public function checkToFind ($fromCurrency, $toCurrency, $hourDifference) {
+        $arrReturn = array();
+        $find = 0;
+        $rate = 0;
+
+        $CurrencyConverter = ClassRegistry::init('CurrencyConverter');
+        $result = $CurrencyConverter->find('all', array('conditions' => 
+            array('from' => $fromCurrency, 'to' => $toCurrency)));
+
+        foreach ($result as $row){
+            $find = 1;
+            $lastUpdated = $row['CurrencyConverter']['modified'];
+            $now = date('Y-m-d H:i:s');
+            $dStart = new DateTime($now);
+            $dEnd = new DateTime($lastUpdated);
+            $diff = $dStart->diff($dEnd);
+
+            if(((int)$diff->y >= 1) || ((int)$diff->m >= 1) || ((int)$diff->d >= 1) || ((int)$diff->h >= $hourDifference) || ((double)$row['CurrencyConverter']['rates'] == 0)){
+                $rate = $this->_getRates($fromCurrency, $toCurrency);
+
+                $CurrencyConverter->id = $row['CurrencyConverter']['id'];
+                $CurrencyConverter->set(array(
+                    'from'        => $fromCurrency,
+                    'to'          => $toCurrency,
+                    'rates'       => $rate,
+                    'modified'    => date('Y-m-d H:i:s'),
+                ));
+                $CurrencyConverter->save();
+            }
+            else{
+                $rate = $row['CurrencyConverter']['rates'];
+            }
+        }
+
+        $arrReturn['find'] = $find;
+        $arrReturn['rate'] = $rate;
+
+        return($arrReturn);
     }
 
     /**

@@ -81,7 +81,7 @@ class DATABASE_CONFIG {
 		'host' => 'localhost',
 		'login' => 'alessandro',
 		'password' => 'AlessandroWeb_2013',
-		'database' => 'currency_converter',
+		'database' => 'currency_converter_test',
 		'prefix' => '',
 		//'encoding' => 'utf8',
 	);
