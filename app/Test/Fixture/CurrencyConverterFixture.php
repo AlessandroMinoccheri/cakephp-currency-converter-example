@@ -1,22 +1,15 @@
 <?php
 class CurrencyConverterFixture extends CakeTestFixture {
-    /*public $records = array(
-        array(
-          'id' => 1,
-          'from' => 'EUR',
-          'to' => 'GBP',
-          'rates' => '2',
-          'created' => '2014-03-18 10:39:23',
-          'modified' => '2014-03-18 10:39:23'
-        ),
-        array(
-          'id' => 2,
-          'from' => 'GBP',
-          'to' => 'EUR',
-          'rates' => '1',
-          'created' => '2014-03-18 10:39:23',
-          'modified' => '2014-03-18 10:39:23'
-        )
+    public $table = 'currency_converters';
+    public $name = 'CurrencyConverter';
+
+    /*public $fields = array(
+      'id'        => array('type' => 'integer', 'key' => 'primary'),
+      'from'      => array('type' => 'string','length' => 255, 'null' => false),
+      'to'        => array('type' => 'string','length' => 255, 'null' => false),
+      'rates'     => array('type' => 'string','length' => 255, 'null' => false),
+      'created'   => array('type' => 'datetime'),
+      'modified'  => array('type' => 'datetime'),
     );*/
 }
 ?>
