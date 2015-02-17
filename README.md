@@ -1,6 +1,8 @@
 cakephp-currency-converter-example
 ==================================
 
+[![Join the chat at https://gitter.im/AlessandroMinoccheri/cakephp-currency-converter-example](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/AlessandroMinoccheri/cakephp-currency-converter-example?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 This is an example project of an installation of cakephp and the plugin cakephp-currency-converter
 
 #Introduction
