@@ -1,4 +1,4 @@
-cakephp-currency-converter-example
+cakephp-currency-converter V 2.0.0
 ==============================
 
 [![Latest Stable Version](https://poser.pugx.org/alessandrominoccheri/cakephp-currency-converter/v/stable.svg)](https://packagist.org/packages/alessandrominoccheri/cakephp-currency-converter)
@@ -27,13 +27,23 @@ If you haven't set to use database, instead, every time you call the library it 
 
 ##Requirements
 
-* CakePHP 2.x
+* CakePHP 3.x
 * PHP 5.x 
+
+For cakephp 2.x you can download version 1.0.0
 
 ---
 
 #Installation
 To install the plugin inside your cakephp project you can do this:
+
+_[Composer]_
+* Open your console
+* Inside your application folder
+* Execute
+```bash
+$ composer require "alessandrominoccheri/cakephp-currency-converter:3.0.*@dev"
+```
 
 _[GIT Submodule]_
 
@@ -55,19 +65,37 @@ _[Manual]_
 _[GIT Clone]_
 
 In your `Plugin` directory type:
+```bash
+$ git clone https://github.com/AlessandroMinoccheri/cakephp-currency-converter.git CurrencyConverter
+```
 
-    git clone https://github.com/AlessandroMinoccheri/cakephp-currency-converter.git CurrencyConverter
-    
 ---
 
 ##Enable plugin
 
-In cakephp 2.x you need to enable the plugin your app/Config/bootstrap.php file:
+In cakephp 3.x you need to enable the plugin your config/bootstrap.php file:
 ```
-CakePlugin::load('CurrencyConverter');
+Plugin::load('CurrencyConverter');
 ```
 
-If you are already using CakePlugin::loadAll();, then this is not necessary.
+In composer file you can edit autoload in this way:
+
+```
+"autoload": {
+    "psr-4": {
+        "App\\": "src",
+        "CurrencyConverter\\": "./plugins/CurrencyConverter/src"
+    }
+},
+```
+
+But if you don0t want to use composer you can load plugin in this way:
+
+```
+Plugin::load('CurrencyConverter', ['autoload' => true]);
+```
+
+If you are already using Plugin::loadAll();, then this is not necessary.
 
 ---
 #Usage
@@ -98,20 +126,18 @@ The function declaration to retrieve your converted price is:
 function convert($from_currency, $to_currency, $amount, $save_into_db = 1, $hour_difference = 1)
 ```
 
-* from_currency: is the actual price currency (Example: EUR, GBP)
-* to_currency: is the currency that you want to convert your price (Example: EUR, GBP)
-* amount: is the price to convert (Example: 200,20)
-* save_into_db: is the variable that configure to use the database or not, if not hour_difference params is escaped
-* hour_difference: is the hour difference to update your currency conversion. For example if you have set to update currency rates every hour, this library get the currency conversion from yahoo finance the first time, store it inside the database and for the next hour it takes conversion rates from the database if exist.
+* **from_currency:** is the actual price currency (Example: EUR, GBP)
+* **to_currency:** is the currency that you want to convert your price (Example: EUR, GBP)
+* **amount:** is the price to convert (Example: 200,20)
+* **save_into_db:** is the variable that configure to use the database or not, if not hour_difference params is escaped
+* **hour_difference:** is the hour difference to update your currency conversion. For example if you have set to update currency rates every hour, this library get the currency conversion from yahoo finance the first time, store it inside the database and for the next hour it takes conversion rates from the database if exist.
 
 ---
 
-##Coming Soon
-
-In coming the plugin version for cakephp 3.0
-
+For cakephp 2.x you can download version 1.0.0
 
 ---
+
 ##License
 
 The MIT License (MIT)
